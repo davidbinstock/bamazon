@@ -1,0 +1,29 @@
+{
+  "name": "bamazon",
+  "version": "1.0.0",
+  "description": "like amazon but with less stuff and more hastle",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidbinstock/bamazon.git"
+  },
+  "keywords": [
+    "bamazon",
+    "cli",
+    "shopping"
+  ],
+  "author": "david binstock",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/davidbinstock/bamazon/issues"
+  },
+  "homepage": "https://github.com/davidbinstock/bamazon#readme",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "inquirer": "^5.2.0",
+    "mysql": "^2.15.0"
+  }
+}
