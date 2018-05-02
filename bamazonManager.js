@@ -62,6 +62,7 @@ function mainMenu(){
                 addToInventory();
                 break;
             case 4:
+                addProductPrompt();
         }
         
     })
@@ -159,4 +160,50 @@ function addToInventory(){
             })
         }
     );
+}
+
+function addProductPrompt(){
+    console.log("Ok, let's add a product!!");
+    inquirer
+        .prompt([
+            {
+                type: "input",
+                message: "Product Name: ",
+                name: "productName"
+            },
+            {
+                type: "input",
+                message: "Department Name: ",
+                name: "department"
+            },
+            {
+                type: "input",
+                message: "Price: ",
+                name: "price"
+            },
+            {
+                type: "input",
+                message: "Stock Quantity: ",
+                name: "quantity"
+
+        }]).then(function(responses) {
+            addToDB(responses.productName, responses.department, parseFloat(responses.price), parseInt(responses.quantity));
+        });
+}
+
+function addToDB(productName, department, price, quantity) {
+        console.log("Adding a new item...\n");
+        var query = connection.query(
+            "INSERT INTO products SET ?",
+            {
+                product_name: productName,
+                department_name: department,
+                price: price,
+                stock_quantity: quantity
+            },
+            function(err, res) {
+                console.log(res.affectedRows + " item entered!\n");
+                mainMenu();
+            }
+        );
 }
