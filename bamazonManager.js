@@ -172,7 +172,7 @@ function addToInventory(){
 
 function addProductPrompt(){
     var query = connection.query(
-        "SELECT DISTINCT department_name FROM products",
+        "SELECT department_name FROM departments",
         function(err, res) {
             if(err) throw err;
             var choicesArray = res.map(function(val,ind,arr){

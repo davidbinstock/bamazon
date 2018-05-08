@@ -58,10 +58,46 @@ function mainMenu(){
 function displaySales(){
     //Display a table of departments
     var query = connection.query(
-        "SELECT d.department_id, d.department_name, d.over_head_costs, SUM(p.product_sales) AS product_sales, (SUM(p.product_sales)-d.over_head_costs) AS total_profit FROM bamazon_db.departments AS d JOIN bamazon_db.products AS p ON d.department_name = p.department_name GROUP BY d.department_name ORDER BY d.department_id ASC;",
+        "SELECT d.department_id, d.department_name, d.over_head_costs, SUM(p.product_sales) AS product_sales, (SUM(p.product_sales)-d.over_head_costs) AS total_profit FROM bamazon_db.departments AS d LEFT JOIN bamazon_db.products AS p ON d.department_name = p.department_name GROUP BY d.department_name ORDER BY d.department_id ASC;",
         function(err, res) {
             console.table(res);
             mainMenu();
         }
     );
+}
+
+
+function createDepartment(){
+    console.log("Ok, let's add a product!!");
+    inquirer
+        .prompt([
+            {
+                type: "input",
+                message: "Department Name: ",
+                name: "departmentName"
+            },
+            {
+                type: "input",
+                message: "Over Head Costs: ",
+                name: "overHead"
+            }
+        ]).then(function(responses) {
+            addToDB(responses.departmentName, parseFloat(responses.overHead));
+        });
+}
+
+
+function addToDB(departmentName, overHead) {
+        console.log("Adding a new item...\n");
+        var query = connection.query(
+            "INSERT INTO departments SET ?",
+            {
+                department_name: departmentName,
+                over_head_costs: overHead
+            },
+            function(err, res) {
+                console.log(res.affectedRows + " item entered!\n");
+                mainMenu();
+            }
+        );
 }
