@@ -36,9 +36,9 @@ CREATE TABLE departments (
 
 INSERT INTO departments
 VALUES
-	(NULL, 'Dirty Clothes', 12345.67),
-    (NULL, 'Broken Things', 23456.78),
-    (NULL, 'Dr Suess', 88888.88),
-    (NULL, 'Silly Stuff', 100.99),
-    (NULL, 'Misc', 34567.89)
+	(NULL, 'Dirty Clothes', 1200.00),
+    (NULL, 'Broken Things', 2300.00),
+    (NULL, 'Dr Suess', 8800.00),
+    (NULL, 'Silly Stuff', 100.00),
+    (NULL, 'Misc', 3400.00)
 ;
