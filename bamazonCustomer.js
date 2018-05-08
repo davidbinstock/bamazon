@@ -46,7 +46,7 @@ function buyProduct(){
         },
         {
             type: "input",
-            message: "How Many units would you like ot buy?",
+            message: "How many units would you like to buy?",
             name: "units"
         }
     ]).then(function(response){
@@ -73,8 +73,19 @@ function checkItemQuantity(productID, unitsToBuy){
 
             if(quantity<=0){
                 console.log("Sorry, we're out of ", productName);
+                buyProduct();
             }else if(unitsToBuy>quantity){
-                console.log("isufficient quantity, choose an amount less than or equal to ", quantity);
+                console.log("insufficient quantity, choose an amount less than or equal to ", quantity);
+                inquirer.prompt([
+                    {
+                        type: "input",
+                        message: "Enter a new quantity:",
+                        name: "units"
+                    }
+                ]).then(function(response){
+                    var units = response.units;
+                    checkItemQuantity(productID, units);
+                })
             }else{
                 console.log("Hooray!! You have bought ", unitsToBuy, "units of", productName, "!");
                 var newQuantity = quantity - unitsToBuy;
