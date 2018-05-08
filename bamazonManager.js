@@ -38,6 +38,10 @@ function mainMenu(){
                 {
                     name: "Add New Product",
                     value: 4
+                },
+                {
+                    name: "Exit",
+                    value: 5
                 }
             ],
             name: "choice"
@@ -63,6 +67,11 @@ function mainMenu(){
                 break;
             case 4:
                 addProductPrompt();
+                break;
+            case 5:
+                console.log("Ok, bye!");
+                connection.end();
+                
         }
         
     })
@@ -86,7 +95,6 @@ function displayLowInventory(maxQuantity){
         function(err, res) {
             if(res.length >= 1){
                 console.table(res);
-            }else{
                 console.log("There are no products with a stock quantity less than "+ maxQuantity)
             }
             mainMenu();
@@ -163,33 +171,44 @@ function addToInventory(){
 }
 
 function addProductPrompt(){
-    console.log("Ok, let's add a product!!");
-    inquirer
-        .prompt([
-            {
-                type: "input",
-                message: "Product Name: ",
-                name: "productName"
-            },
-            {
-                type: "input",
-                message: "Department Name: ",
-                name: "department"
-            },
-            {
-                type: "input",
-                message: "Price: ",
-                name: "price"
-            },
-            {
-                type: "input",
-                message: "Stock Quantity: ",
-                name: "quantity"
-
-        }]).then(function(responses) {
-            addToDB(responses.productName, responses.department, parseFloat(responses.price), parseInt(responses.quantity));
-        });
+    var query = connection.query(
+        "SELECT DISTINCT department_name FROM products",
+        function(err, res) {
+            if(err) throw err;
+            var choicesArray = res.map(function(val,ind,arr){
+                return val.department_name;
+            })
+            console.log("Ok, let's add a product!!");
+            inquirer
+                .prompt([
+                    {
+                        type: "input",
+                        message: "Product Name: ",
+                        name: "productName"
+                    },
+                    {
+                        type: "list",
+                        message: "Department: ",
+                        choices: choicesArray,
+                        name: "department"
+                    },
+                    {
+                        type: "input",
+                        message: "Price: ",
+                        name: "price"
+                    },
+                    {
+                        type: "input",
+                        message: "Stock Quantity: ",
+                        name: "quantity"
+        
+                }]).then(function(responses) {
+                    addToDB(responses.productName, responses.department, parseFloat(responses.price), parseInt(responses.quantity));
+                });
+        }
+    );
 }
+
 
 function addToDB(productName, department, price, quantity) {
         console.log("Adding a new item...\n");

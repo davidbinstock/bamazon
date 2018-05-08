@@ -69,6 +69,7 @@ function checkItemQuantity(productID, unitsToBuy){
             var quantity = parseInt(res[0].stock_quantity);
             var productName = res[0].product_name;
             var price = parseFloat(res[0].price);
+            var sales = parseFloat(res[0].product_sales);
             console.log("quantity: ", quantity)
 
             if(quantity<=0){
@@ -90,13 +91,14 @@ function checkItemQuantity(productID, unitsToBuy){
                 console.log("Hooray!! You have bought ", unitsToBuy, "units of", productName, "!");
                 var newQuantity = quantity - unitsToBuy;
                 var purchasePrice = price * unitsToBuy;
-                updateProduct(productID, newQuantity, purchasePrice);
+                var newSales = sales + purchasePrice;
+                updateProduct(productID, newQuantity, purchasePrice, newSales);
             }
         }
     );
 }
 
-function updateProduct(productID, newQuantity, purchasePrice){
+function updateProduct(productID, newQuantity, purchasePrice, newSales){
     var query = connection.query(
         "UPDATE products SET ? WHERE ?",
         [
@@ -110,8 +112,26 @@ function updateProduct(productID, newQuantity, purchasePrice){
         function(err, res) {
             // console.table(res);
             console.log("Total cost of your purchase: $", purchasePrice)
+            updateSales(productID,newSales);
+            
+        }
+    );
+}
+function updateSales(productID, newSales){
+    var query = connection.query(
+        "UPDATE products SET ? WHERE ?",
+        [
+            {
+                product_sales: newSales
+            },
+            {
+                item_id: productID
+            }
+        ],
+        function(err, res) {
+            // console.table(res);
+            console.log("Total sales updated!")
             entryMenu();
         }
     );
-
 }
